@@ -1,14 +1,22 @@
 <template>
   <div id='planner-header'>
     <div id='planner-title'>
-      
+      <h2>{{state.startOfWeek.format('MMMM D') }}</h2>
+      <span>{{state.startOfWeek.format('YYYY') }}</span>
     </div>
     <div id='planner-days'>
       <div id='planner-nav'>
-        
+        <div>
+          <button @click='changeWeek(-1)'>&lt;</button>
+          <button @click='changeWeek(0)'>Today</button>
+          <button @click='changeWeek(1)'>&gt;</button>
+        </div>
       </div>
       <div v-for='i in 7' :key='i' class='planner-header__day' >
-        
+        <div :class="{'planner-header__day-today': state.startOfWeek.clone().add(i-1, 'd').isSame(currentDate, 'day')}">
+          <h2>{{ state.startOfWeek.clone().add(i-1, 'd').format('D')}}</h2>
+          <span>{{ state.startOfWeek.clone().add(i-1, 'd').format('ddd')}}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -25,15 +33,50 @@
 <script>
 import moment from 'moment'
 import DayDisplay from '../components/DayDisplay.vue'
+import { ref, onUnmounted, reactive } from 'vue';
 
+function useCurrenDate() {
+  const currentDate = ref(moment());
+
+  const updateCurrentDate = () => {
+    currentDate.value = moment();
+  }
+
+  const currentDateInterval = setInterval(updateCurrentDate, 1000);
+
+  onUnmounted(()=> {
+    clearInterval(currentDateInterval);
+  })
+
+  return {
+    currentDate
+  }
+}
 
 export default {
   components: {
     DayDisplay,
   },
   setup () {
+    const { currentDate } = useCurrenDate();
+
+    const state = reactive({
+      startOfWeek: moment().day('Sunday'),
+    })
+
+    const changeWeek = (dir) => {
+      // -1 0 1   0 resperent today 
+      if (dir === 0) {
+        state.startOfWeek = moment().day('Sunday');
+      } else {
+        state.startOfWeek = state.startOfWeek.clone().add( 7 * dir, 'd');
+      }
+    }
+
     return {
-      
+      currentDate,
+      state,
+      changeWeek,
     }
   }
 }
