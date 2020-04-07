@@ -1,7 +1,7 @@
 <template>
   <div id='planner-header'>
     <div id='planner-title'>
-      <h2>{{state.startOfWeek.format('MMMM D') }}</h2>
+      <h2>{{state.startOfWeek.format('MMMM') }}</h2>
       <span>{{state.startOfWeek.format('YYYY') }}</span>
     </div>
     <div id='planner-days'>
@@ -22,10 +22,12 @@
   </div>
   <div id='planner-schedule'>
     <div id='schedule__sidebar'>
-
+      <div class='schedule__hour' v-for='i in 23' :key='i'>
+        <span>{{ moment(i, 'HH').format('h A')}}</span>
+      </div>
     </div>
     <div id='schedule__view'>
-
+        <DayDisplay v-for='i in 7' :key='i' :date="state.startOfWeek.clone().add(i-1, 'd')" />
     </div>
   </div>
 </template>
@@ -77,6 +79,7 @@ export default {
       currentDate,
       state,
       changeWeek,
+      moment,
     }
   }
 }
