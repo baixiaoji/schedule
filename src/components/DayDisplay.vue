@@ -1,7 +1,16 @@
 <template>
   <div class='day'>
-    <ScheduledEvent v-for='e in state.daysEvent' :key='e.id' :scheduledEvent='e'  @dragover.prevent @dragenter.prevent @drop='dropEvent'/>
-    <div class='hour' v-for='i in 24' :key='i' @dragover.prevent @dragenter.prevent @drop='dropEvent'/>
+    <ScheduledEvent v-for='e in state.daysEvent'
+                    :key='e.id' :scheduledEvent='e'
+                    @dragover.prevent
+                    dragenter.prevent
+                    @drop='dropEvent'
+    />
+    <div class='hour' v-for='i in 24' :key='i'
+         @dragover.prevent
+         @dragenter.prevent
+         @drop='dropEvent'
+    />
   </div>
 </template>
 
@@ -45,7 +54,7 @@
             ...e,
             startTime,
             endTime,
-          })
+          });
         }
 
       };

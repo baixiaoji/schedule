@@ -1,7 +1,7 @@
 <template>
   <div class='event'
        :style='state.eventStyle'
-       draggable
+       :draggable='true'
        @dragstart='startDrag'
   >
     <h2>{{ scheduledEvent.name}}</h2>
@@ -10,7 +10,6 @@
 </template>
 
 <script>
-  import moment from 'moment';
   import {reactive, computed} from 'vue';
 
   const convertTimeToPixels = (t) => {
@@ -40,15 +39,16 @@
       });
 
       const startDrag = (evt) => {
+        console.log(evt);
         evt.dataTransfer.effectAllowed = 'move';
         evt.dataTransfer.dropEffect = 'move';
         evt.dataTransfer.setData('event', JSON.stringify(props.scheduledEvent));
-
         const schedule = document.getElementById('planner-schedule');
         const offset = evt.pageY - evt.target.offsetTop + schedule.scrollTop;
 
         evt.dataTransfer.setData('offset', String(offset));
       };
+      
       return {
         state,
         startDrag,
