@@ -28,8 +28,8 @@ export default {
     {
       id: uuid(),
       name: 'Design Lecture',
-      startTime: moment('Mon Mar 09 2020 06:35:52 GMT-0500'),
-      endTime: moment('Mon Mar 09 2020 10:05:52 GMT-0500'),
+      startTime: moment('Wed Apr 08 2020 06:35:52 GMT-0500'),
+      endTime: moment('Wed Apr 08 2020 10:05:52 GMT-0500'),
       calendar: '01'
     },
     {

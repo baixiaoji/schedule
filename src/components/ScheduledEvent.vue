@@ -1,102 +1,102 @@
 <template>
-  <div class='event' :style='state.eventStyle'> 
-	{{ scheduledEvent.name}}
-   </div>
+  <div class='event' :style='state.eventStyle'>
+    {{ scheduledEvent.name}}
+  </div>
 </template>
 
 <script>
-import moment from 'moment'
-import { reactive, computed } from 'vue';
+  import moment from 'moment';
+  import {reactive, computed} from 'vue';
 
-const convertTimeToPixels = (t) => {
-	return (t.hour() + t.minute() / 60) * 50
-}
+  const convertTimeToPixels = (t) => {
+    return (t.hour() + t.minute() / 60) * 50;
+  };
 
-export default {
-	props: {
-		scheduledEvent: Object,
-	},
-	setup (props) {
-		const state = reactive({
-			bgColor: computed(() => '#55efc4'),
-			duration: computed(()=> {
-				const startTime = props.scheduledEvent.startTime;
-				const endTime = props.scheduledEvent.endTime;
+  export default {
+    props: {
+      scheduledEvent: Object,
+    },
+    setup(props) {
+      const state = reactive({
+        bgColor: computed(() => '#55efc4'),
+        duration: computed(() => {
+          const startTime = props.scheduledEvent.startTime;
+          const endTime = props.scheduledEvent.endTime;
 
-				return endTime.diff(startTime, 'hour') + (endTime.diff(startTime, 'minute') % 60) / 60;
-			}),
-			eventStyle: computed(()=> {
-				return {
-					'background-color': state.bgColor,
-					'height': state.duration * 50 + 'px',
-					'top': convertTimeToPixels(props.scheduledEvent.startTime) + 'px'
-				}
-			})
-		})
-		return {
-			state,
-		}
-	}
-}
+          return endTime.diff(startTime, 'hour') + (endTime.diff(startTime, 'minute') % 60) / 60;
+        }),
+        eventStyle: computed(() => {
+          return {
+            'background-color': state.bgColor,
+            'height': state.duration * 50 + 'px',
+            'top': convertTimeToPixels(props.scheduledEvent.startTime) + 'px',
+          };
+        }),
+      });
+      return {
+        state,
+      };
+    },
+  };
 </script>
 
 <style scoped>
   .event {
-	background-color: green;
-	border-radius: 5px;
-	cursor: grab;
-	overflow: hidden;
-	padding: 20px 0 0 10%;
-	position: absolute;
-	width: 100%;
-}
-
-@keyframes shake {
-    0% { 
+    background-color: green;
+    border-radius: 5px;
+    cursor: grab;
+    overflow: hidden;
+    padding: 20px 0 0 10%;
+    position: absolute;
+    width: 100%;
+  }
+  
+  @keyframes shake {
+    0% {
       transform: translateX(0px)
     }
-    25% { 
-      transform: translateX(-2px) 
+    25% {
+      transform: translateX(-2px)
     }
-    50% { 
+    50% {
       transform: translateX(0px)
     }
-    75% { 
+    75% {
       transform: translateX(2px)
     }
-}
-
-.event-shake {
-	animation: shake 0.15s infinite;
-}
-
-.event:before, .event:after {
-	background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.05) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.05) 50%, rgba(0, 0, 0, 0.05) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0) 100%);
-	background-size: 10px 10px;
-	content: ' ';
-	height: 10px;
-	left: 0;
-	position: absolute;
-	width: 100%;
-}
-
-.event:before {
-	cursor: n-resize;
-	top: 0;
-}
-
-.event:after {
-	bottom: 0;
-	cursor: s-resize;
-}
-
-h2 {
-	font-size: 0.8em;
-	font-weight: bold;
-}
-
-h3 {
-	font-size: 0.75em;
-	margin-top: 5px;
-}
+  }
+  
+  .event-shake {
+    animation: shake 0.15s infinite;
+  }
+  
+  .event:before, .event:after {
+    background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.05) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.05) 50%, rgba(0, 0, 0, 0.05) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0) 100%);
+    background-size: 10px 10px;
+    content: ' ';
+    height: 10px;
+    left: 0;
+    position: absolute;
+    width: 100%;
+  }
+  
+  .event:before {
+    cursor: n-resize;
+    top: 0;
+  }
+  
+  .event:after {
+    bottom: 0;
+    cursor: s-resize;
+  }
+  
+  h2 {
+    font-size: 0.8em;
+    font-weight: bold;
+  }
+  
+  h3 {
+    font-size: 0.75em;
+    margin-top: 5px;
+  }
 </style>
