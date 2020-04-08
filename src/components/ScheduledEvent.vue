@@ -1,6 +1,11 @@
 <template>
-  <div class='event' :style='state.eventStyle'>
-    {{ scheduledEvent.name}}
+  <div class='event'
+       :style='state.eventStyle'
+       draggable
+       @dragstart='startDrag'
+  >
+    <h2>{{ scheduledEvent.name}}</h2>
+    <h3>{{ scheduledEvent.startTime.format('h:mma') }} - {{ scheduledEvent.endTime.format('h:mma') }}</h3>
   </div>
 </template>
 
@@ -33,8 +38,20 @@
           };
         }),
       });
+
+      const startDrag = (evt) => {
+        evt.dataTransfer.effectAllowed = 'move';
+        evt.dataTransfer.dropEffect = 'move';
+        evt.dataTransfer.setData('event', JSON.stringify(props.scheduledEvent));
+
+        const schedule = document.getElementById('planner-schedule');
+        const offset = evt.pageY - evt.target.offsetTop + schedule.scrollTop;
+
+        evt.dataTransfer.setData('offset', String(offset));
+      };
       return {
         state,
+        startDrag,
       };
     },
   };
