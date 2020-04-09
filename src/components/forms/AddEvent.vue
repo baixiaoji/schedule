@@ -2,30 +2,34 @@
   <div class='popup-bg'>
     <div class='popup'>
       <div class='popup-header'>
-        
+        <h2>添加日程</h2>
+        <span @click='close'> x </span>
       </div>
       <div class='popup-content'>
-        
+      
       </div>
       <div class='popup-footer'>
-        
+      
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import moment from 'moment'
-export default {
-  setup () {
-    return {
-      
-    }
-  }
-}
+  import moment from 'moment';
+  import { usePopupLogic } from '../../logic/popup-logic';
+
+  export default {
+    setup(props, context) {
+      const {close} = usePopupLogic('addEvent', context.emit);
+      return {
+        close,
+      };
+    },
+  };
 </script>
 
-<style src='../../styles/popup.css' scoped >
+<style src='../../styles/popup.css' scoped>
 </style>
 <style scoped>
   label {
@@ -35,18 +39,19 @@ export default {
     font-weight: bold;
     margin: 10px 0;
   }
-
+  
   input[type='text'] {
     font-size: 0.9em;
     outline: none;
     padding: 5px;
     width: 100%;
   }
-
+  
   .time-input {
-    font-family: inherit; 
+    font-family: inherit;
     font-size: 0.8em;
   }
+  
   .calendar-list {
     background-color: #eee;
     color: #ccc;
@@ -57,11 +62,12 @@ export default {
     padding: 5px 10px;
   }
   
-
+  
   .popup-error {
     color: #ff7675;
     font-size: 0.8em;
   }
+  
   .popup-footer__cancel {
     color: #888;
     cursor: pointer;
@@ -70,7 +76,7 @@ export default {
     padding: 5px 0;
     text-decoration: underline;
   }
-
+  
   .popup-footer__delete {
     background: #ff7675;
     color: white;
