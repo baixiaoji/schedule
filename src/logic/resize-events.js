@@ -32,8 +32,6 @@ export function useResizeEvents(props) {
   const mouseDown = (evt) => {
     if (evt.offsetY <= 10 || evt.target.offsetHeight - evt.offsetY <= 10) {
       timeEdited = (evt.offsetY <= 10) ? 'startTime' : 'endTime';
-      console.log('timeEdited');
-      console.log(timeEdited);
       document.addEventListener('mousemove', resize);
     }
   };
