@@ -48,8 +48,7 @@
         let startTime = props.date.clone().hour(hour).minute(minutes);
         let duration = moment(e.endTime).diff(e.startTime);
         let endTime = startTime.clone().add(duration, 'ms');
-
-        if (startTime.isSame(props.data, 'day') && endTime.clone().subtract(1, 'minute').isSame(props.date, 'day')) {
+        if (startTime.isSame(props.date, 'day') && endTime.clone().subtract(1, 'minute').isSame(props.date, 'day')) {
           store.editEvent({
             ...e,
             startTime,
