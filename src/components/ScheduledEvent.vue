@@ -1,7 +1,7 @@
 <template>
   <div class='event'
        :style='state.eventStyle'
-       :draggable='true'
+       draggable='true'
        @dragstart='startDrag'
   >
     <h2>{{ scheduledEvent.name}}</h2>
@@ -48,7 +48,7 @@
 
         evt.dataTransfer.setData('offset', String(offset));
       };
-      
+
       return {
         state,
         startDrag,
