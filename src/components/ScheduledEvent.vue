@@ -3,6 +3,7 @@
        :style='state.eventStyle'
        draggable='true'
        @dragstart='startDrag'
+       @mousedown='mouseDown'
   >
     <h2>{{ scheduledEvent.name}}</h2>
     <h3>{{ scheduledEvent.startTime.format('h:mma') }} - {{ scheduledEvent.endTime.format('h:mma') }}</h3>
@@ -11,7 +12,8 @@
 
 <script>
   import {reactive, computed} from 'vue';
-
+  import {useResizeEvents} from '../logic/resize-events';
+  
   const convertTimeToPixels = (t) => {
     return (t.hour() + t.minute() / 60) * 50;
   };
@@ -39,7 +41,10 @@
       });
 
       const startDrag = (evt) => {
-        console.log(evt);
+        if (evt.offsetY <= 15 || evt.target.offsetHeight - evt.offsetY <= 15) {
+          evt.preventDefault();
+          return;
+        }
         evt.dataTransfer.effectAllowed = 'move';
         evt.dataTransfer.dropEffect = 'move';
         evt.dataTransfer.setData('event', JSON.stringify(props.scheduledEvent));
@@ -48,10 +53,12 @@
 
         evt.dataTransfer.setData('offset', String(offset));
       };
+      const { mouseDown } = useResizeEvents(props);
 
       return {
         state,
         startDrag,
+        mouseDown,
       };
     },
   };
