@@ -22,20 +22,23 @@
         <DatePicker @update='updateDate'
                     :default-date='defaultDate'/>
         <label>Start Time</label>
-        <input type="time" @change='changeTime("startTime", $event)' @blur='updateTimeDisplay("startTime", $event)'/>
+        <input id='add-event_start-time' type="time" @change='changeTime("startTime", $event)'
+               @blur='updateTimeDisplay("startTime", $event)'/>
         <label>End Time</label>
-        <input type="time" @change='changeTime("endTime", $event)' @blur='updateTimeDisplay("endTime", $event)'/>
+        <input id='add-event_end-time' type="time" @change='changeTime("endTime", $event)'
+               @blur='updateTimeDisplay("endTime", $event)'/>
       </div>
       <div class='popup-footer'>
+        <p class='popup-error'> {{ formError }}</p>
         <div class='popup-footer__cancel' @click='close'> Cancel</div>
-        <div class='popup-footer__confirm' @click='submit'> Confirm</div>
+        <div class='popup-footer__confirm' @click='submit'>Confirm</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import {reactive, ref} from 'vue';
+  import {reactive, ref, onMounted} from 'vue';
   import moment from 'moment';
   import {usePopupLogic} from '../../logic/popup-logic';
   import {store} from '../../store';
@@ -46,6 +49,7 @@
       DatePicker,
     },
     setup(props, context) {
+      const formError = ref(null);
       const eventData = reactive({
         calendar: '01',
         name: '',
@@ -54,9 +58,12 @@
         endTime: moment(),
       });
       const defaultDate = ref(null);
-
+      
       const {close} = usePopupLogic('addEvent', context.emit);
-
+      onMounted(() => {
+        document.getElementById('add-event_start-time').value = eventData.startTime.format('HH:mm');
+        document.getElementById('add-event_end-time').value = eventData.endTime.format('HH:mm');
+      });
       const calendarStyle = (cal) => {
         if (eventData.calendar === cal.id) {
           return {
@@ -67,7 +74,6 @@
         }
       };
       const changeTime = (property, evt) => {
-        console.log(evt.target.value);
         const hour = parseInt(evt.target.value.split(':')[0]);
         const minutes = parseInt(evt.target.value.split(':')[1]);
 
@@ -88,10 +94,31 @@
         });
       };
       const submit = () => {
+        if (eventData.name.trim().length === 0) {
+          formError.value = 'Name cannot be empty';
+          return;
+        }
 
+        if (eventData.startTime.isAfter(eventData.endTime)) {
+          formError.value = 'schedule time was wrong';
+          return;
+        }
+
+        formError.value = null;
+
+        const isAdd = store.addEvent({
+          ...eventData,
+        });
+
+        if (isAdd) {
+          close();
+        } else {
+          formError.value = 'time event is not available';
+        }
       };
       return {
         close,
+        formError,
         eventData,
         state: store.getState(),
         calendarStyle,
