@@ -14,7 +14,8 @@
 <script>
   import {reactive, computed} from 'vue';
   import {useResizeEvents} from '../logic/resize-events';
-  
+  import {store} from '../store';
+
   const convertTimeToPixels = (t) => {
     return (t.hour() + t.minute() / 60) * 50;
   };
@@ -25,7 +26,10 @@
     },
     setup(props, {emit}) {
       const state = reactive({
-        bgColor: computed(() => '#55efc4'),
+        bgColor: computed(() => {
+          let calendars = store.getState().calendars
+          return calendars.find(c => c.id === props.scheduledEvent.calendar).color
+        }),
         duration: computed(() => {
           const startTime = props.scheduledEvent.startTime;
           const endTime = props.scheduledEvent.endTime;
