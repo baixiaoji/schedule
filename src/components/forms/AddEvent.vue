@@ -2,7 +2,8 @@
   <div class='popup-bg'>
     <div class='popup'>
       <div class='popup-header'>
-        <h2>添加日程</h2>
+        <h2 v-if='existingEvent'>编辑日常</h2>
+        <h2 v-else>添加日程</h2>
         <span @click='close'> x </span>
       </div>
       <div class='popup-content'>
@@ -31,6 +32,7 @@
       <div class='popup-footer'>
         <p class='popup-error'> {{ formError }}</p>
         <div class='popup-footer__cancel' @click='close'> Cancel</div>
+        <div class='popup-footer__delete' v-if='existingEvent' @click='deleteEvent'>Delete</div>
         <div class='popup-footer__confirm' @click='submit'>Confirm</div>
       </div>
     </div>
@@ -137,6 +139,10 @@
           formError.value = 'time event is not available, there is a event';
         }
       };
+      const deleteEvent = () => {
+        store.deleteEvent(props.existingEvent.id);
+        close();
+      }
       return {
         close,
         formError,
@@ -147,6 +153,7 @@
         changeTime,
         updateTimeDisplay,
         submit,
+        deleteEvent,
         updateDate,
       };
     },
