@@ -2,8 +2,8 @@
   <div class='popup-bg'>
     <div class='popup'>
       <div class='popup-header'>
-        <h2 v-if='existingEvent'>编辑日常</h2>
-        <h2 v-else>添加日程</h2>
+        <h2 v-if='existingEvent'>Edit Event</h2>
+        <h2 v-else>Add Event</h2>
         <span @click='close'> x </span>
       </div>
       <div class='popup-content'>

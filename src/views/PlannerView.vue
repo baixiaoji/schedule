@@ -1,10 +1,12 @@
 <template>
-  <AddEvent @close='closePopup' v-if='state.addEventOpen' :existingEvent='state.existingEvent'/>
+  <AddEvent @close='closePopup' v-if='state.addEventOpen' :existingEvent='state.existingEvent' />
+  <EditCalendar @close='closePopup' v-if='state.editCalendarOpen' />
   <div id='planner-header'>
     <div id='planner-title'>
       <h2>{{state.startOfWeek.format('MMMM') }}</h2>
       <span>{{state.startOfWeek.format('YYYY') }}</span>
-      <div class='add-event' @click='state.addEventOpen = true'>添加日常</div>
+      <div class='add-event' @click='state.addEventOpen = true'>Add Event</div>
+      <div class='add-event' @click='state.editCalendarOpen = true'>Edit Calendar</div>
     </div>
     <div id='planner-days'>
       <div id='planner-nav'>
@@ -42,6 +44,7 @@
 import moment from 'moment'
 import DayDisplay from '../components/DayDisplay.vue'
 import AddEvent from '../components/forms/AddEvent.vue';
+import EditCalendar from '../components/forms/EditCalendars.vue';
 import { ref, onUnmounted, reactive } from 'vue';
 
 function useCurrentDate() {
@@ -66,12 +69,14 @@ export default {
   components: {
     DayDisplay,
     AddEvent,
+    EditCalendar,
   },
   setup () {
     const { currentDate } = useCurrentDate();
 
     const state = reactive({
       addEventOpen: false,
+      editCalendarOpen: true,
       existingEvent: null,
       startOfWeek: moment().day('Sunday'),
     })
