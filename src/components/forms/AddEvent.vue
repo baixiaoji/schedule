@@ -32,8 +32,8 @@
       <div class='popup-footer'>
         <p class='popup-error'> {{ formError }}</p>
         <div class='popup-footer__cancel' @click='close'> Cancel</div>
-        <div class='popup-footer__delete' v-if='existingEvent' @click='deleteEvent'>Delete</div>
         <div class='popup-footer__confirm' @click='submit'>Confirm</div>
+        <div class='popup-footer__delete' v-if='existingEvent' @click='deleteEvent'>Delete</div>
       </div>
     </div>
   </div>

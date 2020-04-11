@@ -56,8 +56,9 @@ class PlannerStore extends Store {
     if (!e) {
       return false;
     }
+    const isTimeAvailable = this.isTimeAvailable(newEvent.id, newEvent.startTime, newEvent.endTime);
 
-    if (this.isTimeAvailable(newEvent.id, newEvent.startTime, newEvent.endTime).available) {
+    if (isTimeAvailable.available) {
       e.name = newEvent.name;
       e.calendar = newEvent.calendar;
       e.startTime = newEvent.startTime;
@@ -65,6 +66,13 @@ class PlannerStore extends Store {
       return true;
     }
 
+    e.shake = true;
+    isTimeAvailable.overlap.shake = true;
+
+    setTimeout(() => {
+      e.shake = false;
+      isTimeAvailable.overlap.shake = false;
+    }, 500)
     return false;
   }
 

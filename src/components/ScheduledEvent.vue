@@ -2,6 +2,7 @@
   <div class='event'
        :style='state.eventStyle'
        draggable='true'
+       :class='{"event-shake": scheduledEvent.shake}'
        @dragstart='startDrag'
        @mousedown='mouseDown'
        @dblclick='editEvent'
