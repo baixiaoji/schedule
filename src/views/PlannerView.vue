@@ -1,5 +1,5 @@
 <template>
-  <AddEvent @close='closePopup' v-if='state.addEventOpen'/>
+  <AddEvent @close='closePopup' v-if='state.addEventOpen' :existingEvent='state.existingEvent'/>
   <div id='planner-header'>
     <div id='planner-title'>
       <h2>{{state.startOfWeek.format('MMMM') }}</h2>
@@ -29,7 +29,11 @@
       </div>
     </div>
     <div id='schedule__view'>
-        <DayDisplay v-for='i in 7' :key='i' :date="state.startOfWeek.clone().add(i-1, 'd')" />
+        <DayDisplay
+            v-for='i in 7' :key='i'
+            :date="state.startOfWeek.clone().add(i-1, 'd')"
+            @editEvent='openEditPopup'
+        />
     </div>
   </div>
 </template>
@@ -68,6 +72,7 @@ export default {
 
     const state = reactive({
       addEventOpen: false,
+      existingEvent: null,
       startOfWeek: moment().day('Sunday'),
     })
 
@@ -81,6 +86,12 @@ export default {
     }
     const closePopup = (evt) => {
       state[evt.name + 'Open'] = false;
+      state.existingEvent =  null;
+    }
+    
+    const openEditPopup = (e) => {
+      state.addEventOpen = true;
+      state.existingEvent = e;
     }
     return {
       currentDate,
@@ -88,6 +99,7 @@ export default {
       closePopup,
       changeWeek,
       moment,
+      openEditPopup,
     }
   }
 }

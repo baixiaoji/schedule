@@ -48,8 +48,13 @@
     components: {
       DatePicker,
     },
+    props: {
+      existingEvent: Object,
+    },
     setup(props, context) {
       const formError = ref(null);
+      const defaultDate = ref(null);
+      
       const eventData = reactive({
         calendar: '01',
         name: '',
@@ -57,9 +62,18 @@
         startTime: moment(),
         endTime: moment(),
       });
-      const defaultDate = ref(null);
+      
+      if (props.existingEvent) {
+        eventData.calendar = props.existingEvent.calendar;
+        eventData.name = props.existingEvent.name;
+        eventData.startTime = props.existingEvent.startTime;
+        eventData.endTime = props.existingEvent.endTime;
+        
+        defaultDate.value = props.existingEvent.startTime.clone();
+      }
       
       const {close} = usePopupLogic('addEvent', context.emit);
+      
       onMounted(() => {
         document.getElementById('add-event_start-time').value = eventData.startTime.format('HH:mm');
         document.getElementById('add-event_end-time').value = eventData.endTime.format('HH:mm');
@@ -105,21 +119,29 @@
         }
 
         formError.value = null;
-
-        const isAdd = store.addEvent({
-          ...eventData,
-        });
-
+        let isAdd;
+        if (props.existingEvent) {
+          const id = props.existingEvent.id;
+          isAdd = store.editEvent({
+            id,
+            ...eventData,
+          })
+        } else {
+          isAdd = store.addEvent({
+            ...eventData,
+          });
+        }
         if (isAdd) {
           close();
         } else {
-          formError.value = 'time event is not available';
+          formError.value = 'time event is not available, there is a event';
         }
       };
       return {
         close,
         formError,
         eventData,
+        defaultDate,
         state: store.getState(),
         calendarStyle,
         changeTime,

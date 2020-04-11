@@ -4,6 +4,7 @@
        draggable='true'
        @dragstart='startDrag'
        @mousedown='mouseDown'
+       @dblclick='editEvent'
   >
     <h2>{{ scheduledEvent.name}}</h2>
     <h3>{{ scheduledEvent.startTime.format('h:mma') }} - {{ scheduledEvent.endTime.format('h:mma') }}</h3>
@@ -22,7 +23,7 @@
     props: {
       scheduledEvent: Object,
     },
-    setup(props) {
+    setup(props, {emit}) {
       const state = reactive({
         bgColor: computed(() => '#55efc4'),
         duration: computed(() => {
@@ -55,10 +56,14 @@
       };
       const { mouseDown } = useResizeEvents(props);
 
+      const editEvent = () => {
+        emit('editEvent', props.scheduledEvent);
+      }
       return {
         state,
         startDrag,
         mouseDown,
+        editEvent,
       };
     },
   };

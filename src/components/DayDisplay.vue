@@ -5,6 +5,7 @@
                     @dragover.prevent
                     dragenter.prevent
                     @drop='dropEvent'
+                    v-bind='$attrs'
     />
     <div class='hour' v-for='i in 24' :key='i'
          @dragover.prevent
